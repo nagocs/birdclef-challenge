@@ -2,7 +2,8 @@
 
 ## Csapatinformációk
 ---
-Csapatnév: 
+Csapatnév: TBD...
+
 Csapattagok:
 - Agócs Norbert (PKB316)
 - Magyari Zsombor (OXZQS8)
