@@ -1,4 +1,4 @@
-# Surface Learning for Clinical Neuroimaging (SLCN)
+# BirdCLEF
 
 ## Csapatinformációk
 ---
