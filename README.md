@@ -2,7 +2,7 @@
 
 ## Csapatinformációk
 ---
-Csapatnév: TBD...
+Csapatnév: AMW
 
 Csapattagok:
 - Agócs Norbert (PKB316)
