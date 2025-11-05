@@ -11,23 +11,19 @@ Csapattagok:
 
 ## Projekt ismertetése
 
-TBD...
+A BirdCLEF projekt célja, hogy deep learning segítségével automatizáljuk a madárfajok azonosítását hangfelvételek alapján. A projekt során nagy mennyiségű terepi hangfelvétel áll rendelkezésre különböző madárfajokról, és egy olyan modellt kell fejlesztenünk, amely képes felismerni, mely faj(ok) hallhatók az adott hangmintában.
 
 ## Repo felépítése
 
 ### Könyvtárstruktúra
 ```bash
 .
-├── TBD...
-├── TBD.../
-│ ├── TBD... # TBD
+├── data/
+│   ├── train_audio/
+│   │   ├── asbfly/
+│   │   ├── ashdro1
+│   │   ├── .../
+│   ├── train_metadata.csv
+├── data_visualisation.ipynb
+
 ```
-
-
-
-
-
-
-
-
-csapat neve, csapattagok nevei és Neptun kódjai, a projekt ismertetése, a repo-ban található fájlok funkciói, és a futtatás módja (ha ipyn, akkor elég a fájl nevét megadni) 
