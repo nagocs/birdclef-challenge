@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1765564691.53998 "main.aux" "main.bbl" "main" 1765564840.74207 0
+["bibtex main"] 1765564691.53998 "main.aux" "main.bbl" "main" 1765565115.87898 0
   "./references.bib" 1765553516 5290 4c49d6f6ecd0b9d1874484429fa6a025 ""
   "C:/Users/nagocs/AppData/Local/Programs/MiKTeX/bibtex/bst/ieeetran/ieeetran.bst" 1440622569 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "main.aux" 1765564840 2888 265c364d17068493b065cc32fb125fbb "pdflatex"
+  "main.aux" 1765565115 2888 265c364d17068493b065cc32fb125fbb "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1765564839.81184 "d:/nagocs/Documents/GitHub/birdclef-challenge/docs/main.tex" "main.pdf" "main" 1765564840.74265 0
+["pdflatex"] 1765565114.95237 "d:/nagocs/Documents/GitHub/birdclef-challenge/docs/main.tex" "main.pdf" "main" 1765565115.87953 0
   "C:/Users/nagocs/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1765315313 1777211 3102347ce6a90f88aa09059512f2ab83 ""
   "C:/Users/nagocs/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1765106549 13333995 14bcdb5ba21a414a4b3117b20fd01ce9 ""
   "C:/Users/nagocs/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc" 1458473887 4993 80dc9bab7f31fb78a000ccfed0e27cab ""
@@ -104,11 +104,11 @@
   "C:/Users/nagocs/AppData/Local/Programs/MiKTeX/tex/latex/tools/verbatim.sty" 1761901070 7532 26d26e9d8f2ca784270d5da8ec7d102b ""
   "C:/Users/nagocs/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "IEEEtran.cls" 1765528611 288451 7379a03af5f3d0dad26db23a43c3a726 ""
-  "d:/nagocs/Documents/GitHub/birdclef-challenge/docs/main.tex" 1765564839 14114 5071b52b4eee9484d19ce66c7d236075 ""
+  "d:/nagocs/Documents/GitHub/birdclef-challenge/docs/main.tex" 1765565114 14164 c76afe92566e9008e16cb31d50e4ff46 ""
   "figures/fig1.pdf" 1765564647 478237 a9d9f7a9250c7c42eff604b0f5a1d609 ""
-  "main.aux" 1765564840 2888 265c364d17068493b065cc32fb125fbb "pdflatex"
+  "main.aux" 1765565115 2888 265c364d17068493b065cc32fb125fbb "pdflatex"
   "main.bbl" 1765564691 5339 a80ba1a8a9304642f99fd8f876fe339a "bibtex main"
-  "main.tex" 1765564839 14114 5071b52b4eee9484d19ce66c7d236075 ""
+  "main.tex" 1765565114 14164 c76afe92566e9008e16cb31d50e4ff46 ""
   (generated)
   "main.aux"
   "main.log"
