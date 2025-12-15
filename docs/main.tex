@@ -143,27 +143,27 @@
 
   \subsection{Neurális hálózat architektúra}
 
-    A feladat megoldására a modern \emph{EfficientNetV2} architektúrát \cite{tan2021} alkalmaztuk, pontosabban annak B0 variánsát. Az EfficientNetV2 modellek célja, hogy a korábbi konvolúciós hálózatoknál gyorsabb tanítást és jobb paraméterhatékonyságot érjenek el, miközben megőrzik vagy javítják a pontosságot.
+  A feladat megoldására a modern \emph{EfficientNetV2} architektúrát \cite{tan2021} alkalmaztuk, pontosabban annak B0 variánsát. Az EfficientNetV2 modellek célja, hogy a korábbi konvolúciós hálózatoknál gyorsabb tanítást és jobb paraméterhatékonyságot érjenek el, miközben megőrzik vagy javítják a pontosságot.
 
-    A modellünk bemenete egy $128 \times 384 \times 1$ méretű tenzor, amely a normalizált, egycsatornás mel-spektrogramot reprezentálja. Az architektúra fő építőkövei a \emph{MBConv} (Mobile Inverted Bottleneck Convolution) és a \emph{Fused-MBConv} blokkok. A FUsed-MBConv blokkokat a hálózat korai szakaszaiban alkalmazzuk. Itt az $1 \times 1$ kiterjesztő konvolúciót és a $3 \times 3$ mélységi (depthwise) konvolúciót egyetlen, $3 \times 3$ konvolúcióba vonjuk össze. Ez a hardveres gyorsítók (pl.~GPU) jobb kihasználását teszi lehetővé. Az MBConv blokkokat a hálózat felső rétegeiben használjuk. Az MBConv blokkok integráns részét képezi a Squeeze-and-Excitation (SE) mechanizmus, amely a csatornák közötti függőségek modellezésével növeli a hálózat reprezentációs képességét. A modul először globális átlagolással tömöríti a térbeli információkat ('squeeze'), majd egy kétrétegű neurális háló segítségével adaptív súlyokat rendel az egyes csatornákhoz ('excitation'). Ez az eljárás lehetővé teszi, hogy a modell dinamikusan felerősítse a madárfajok azonosítása szempontjából releváns jellemzőtérképeket, miközben elnyomja a kevésbé informatív, zajos csatornákat.
+  A modellünk bemenete egy $128 \times 384 \times 1$ méretű tenzor, amely a normalizált, egycsatornás mel-spektrogramot reprezentálja. Az architektúra fő építőkövei a \emph{MBConv} (Mobile Inverted Bottleneck Convolution) és a \emph{Fused-MBConv} blokkok. A FUsed-MBConv blokkokat a hálózat korai szakaszaiban alkalmazzuk. Itt az $1 \times 1$ kiterjesztő konvolúciót és a $3 \times 3$ mélységi (depthwise) konvolúciót egyetlen, $3 \times 3$ konvolúcióba vonjuk össze. Ez a hardveres gyorsítók (pl.~GPU) jobb kihasználását teszi lehetővé. Az MBConv blokkokat a hálózat felső rétegeiben használjuk. Az MBConv blokkok integráns részét képezi a Squeeze-and-Excitation (SE) mechanizmus, amely a csatornák közötti függőségek modellezésével növeli a hálózat reprezentációs képességét. A modul először globális átlagolással tömöríti a térbeli információkat ('squeeze'), majd egy kétrétegű neurális háló segítségével adaptív súlyokat rendel az egyes csatornákhoz ('excitation'). Ez az eljárás lehetővé teszi, hogy a modell dinamikusan felerősítse a madárfajok azonosítása szempontjából releváns jellemzőtérképeket, miközben elnyomja a kevésbé informatív, zajos csatornákat.
 
-    A hálózat felépítése 6 fő szakaszból (stage) áll, amelyek során a térbeli dimenziók csökkennek, míg a csatornák száma növekszik. A kimeneti réteg előtt egy $1 \times 1$ konvolúciót, majd \emph{Global Average Pooling}-ot alkalmazunk, amely a térbeli dimenziókat átlagolja. Végül egy sűrű (Dense) réteg következik \emph{Softmax} aktivációs függvénnyel, amely a 182 madárfajhoz tartozó valószínűségeket állítja elő. A modell összes tanítható paramétereinek száma 11,598,934. Egy ekkora hálózaton egy epochon át tartó tanítás T4 GPU-val nagyjából fél órát vett igénybe.
+  A hálózat felépítése 6 fő szakaszból (stage) áll, amelyek során a térbeli dimenziók csökkennek, míg a csatornák száma növekszik. A kimeneti réteg előtt egy $1 \times 1$ konvolúciót, majd \emph{Global Average Pooling}-ot alkalmazunk, amely a térbeli dimenziókat átlagolja. Végül egy sűrű (Dense) réteg következik \emph{Softmax} aktivációs függvénnyel, amely a 182 madárfajhoz tartozó valószínűségeket állítja elő. A modell összes tanítható paramétereinek száma 11,598,934. Egy ekkora hálózaton egy epochon át tartó tanítás T4 GPU-val nagyjából fél órát vett igénybe.
 
-  \subsection{Tanítási folyamat}
+ \subsection{Tanítási folyamat}
 
-    A modell tanítása során a teljes adathalmazt három részre osztottuk: a tanító halmaz az adatok 80\%-át, a validációs halmaz és a teszt halmaz pedig 10-10\%-át teszi ki. A felosztás során sztratifikált mintavételezést alkalmaztunk, biztosítva, hogy a ritka fajok aránya minden részhalmazban kiegyensúlyozott legyen.
+  A modell tanítása során a teljes adathalmazt három részre osztottuk: a tanító halmaz az adatok 80\%-át, a validációs halmaz és a teszt halmaz pedig 10-10\%-át teszi ki. A felosztás során sztratifikált mintavételezést alkalmaztunk, biztosítva, hogy a ritka fajok aránya minden részhalmazban kiegyensúlyozott legyen.
 
-    A tanítás főbb paraméterei az alábbiak:
-    \begin{itemize}
-        \item \textbf{Loss függvény:} Ritka kategorikus kereszt-entrópiát (Sparse Categorical Crossentropy) alkalmaztunk, mivel a célváltozóink egész számként kódolt osztálycímkék.
-        \item \textbf{Optimalizáló:} Adam algoritmust használtunk $10^{-3}$ tanulási rátával.
-        \item \textbf{Batch méret:} 32 minta lépésenként.
-        \item \textbf{Epochok száma:} A tanítást korai leállítással (Early Stopping) felügyeltük, 5 epoch türelmi idővel (patience). Ez azt jelenti, hogy ha a validációs veszteség 5 epochon keresztül nem javul, a tanítás leáll, és a modell visszaáll a legjobb eredményt adó súlyokra.
-    \end{itemize}
+  A tanítás főbb paraméterei az alábbiak:
+  \begin{itemize}
+    \item \textbf{Loss függvény:} Ritka kategorikus kereszt-entrópiát (Sparse Categorical Crossentropy) alkalmaztunk, mivel a célváltozóink egész számként kódolt osztálycímkék.
+    \item \textbf{Optimalizáló:} Adam algoritmust használtunk $10^{-3}$ tanulási rátával.
+    \item \textbf{Batch méret:} 32 minta lépésenként.
+    \item \textbf{Epochok száma:} A tanítást korai leállítással (Early Stopping) felügyeltük, 5 epoch türelmi idővel (patience). Ez azt jelenti, hogy ha a validációs veszteség 5 epochon keresztül nem javul, a tanítás leáll, és a modell visszaáll a legjobb eredményt adó súlyokra.
+  \end{itemize}
 
-  \subsection{Kiértékelés}
-    
-    A betanított modell teljesítményét a tanítás során nem látott teszt adathalmazon értékeltük ki. A fő mérőszámunk az osztályozási pontosság (accuracy), amely megadja a helyesen azonosított madárfajok arányát az összes tesztmintához viszonyítva. Emellett a teszt veszteséget (Test Loss) is monitoroztuk, amely a modell valószínűségi becsléseinek bizonytalanságát tükrözi. A végső kiértékeléshez a \emph{ModelCheckpoint} által mentett, a validációs halmazon legjobb teljesítményt nyújtó modellt használtuk fel (best\_cnn.keras).
+ \subsection{Kiértékelés}
+ 
+  A betanított modell teljesítményét a tanítás során nem látott teszt adathalmazon értékeltük ki. A fő mérőszámunk az osztályozási pontosság (accuracy), amely megadja a helyesen azonosított madárfajok arányát az összes tesztmintához viszonyítva. Emellett a teszt veszteséget (Test Loss) is monitoroztuk, amely a modell valószínűségi becsléseinek bizonytalanságát tükrözi. A végső kiértékeléshez a \emph{ModelCheckpoint} által mentett, a validációs halmazon legjobb teljesítményt nyújtó modellt használtuk fel (best\_cnn.keras).
 
 \section{Eredmények}
 
@@ -171,10 +171,10 @@ A tanítási folyamatot a veszteség (loss) és a pontosság (accuracy) metriká
 
 \begin{figure}[!t]
     \centering
-    \subfloat[Veszteség alakulása]{\includegraphics[width=3.2in]{training_loss.png}
+    \subfloat[Veszteség alakulása]{\includegraphics[width=3.2in]{figures/training_loss.png}
     \label{fig_loss}}
     \hfil
-    \subfloat[Pontosság alakulása]{\includegraphics[width=3.2in]{training_accuracy.png}
+    \subfloat[Pontosság alakulása]{\includegraphics[width=3.2in]{figures/training_accuracy.png}
     \label{fig_acc}}
     \caption{A tanítási és validációs metrikák alakulása az epochok függvényében.}
     \label{fig:training_plots}
@@ -194,9 +194,9 @@ Az elért közel 60\%-os pontosság a 182 osztályos feladat komplexitását és
 
 \section{Összefoglalás}
 
-  Jelen cikkben bemutattunk egy konvolúciós neurális hálózaton alapuló rendszert, amely képes a BirdCLEF 2024 adathalmaz madárhangjainak azonosítására. A hangjeleket mel-spektrogrammá alakítva, képfeldolgozási feladatként oldottuk meg az osztályozást egy EfficientNetV2B0 architektúra segítségével.
+ Jelen cikkben bemutattunk egy konvolúciós neurális hálózaton alapuló rendszert, amely képes a BirdCLEF 2024 adathalmaz madárhangjainak azonosítására. A hangjeleket mel-spektrogrammá alakítva, képfeldolgozási feladatként oldottuk meg az osztályozást egy EfficientNetV2B0 architektúra segítségével.
 
-  Az eredmények igazolták, hogy a modern CNN architektúrák hatékonyan alkalmazhatók bioakusztikai feladatokra, még korlátozott tanítási erőforrások mellett is. A jövőbeli fejlesztések során érdemes lehet vizsgálni a zajszűrési eljárások hatását, a hosszabb hangfelvételek szegmentálási stratégiáit, valamint a transzformer alapú architektúrák (pl.~Audio Spectrogram Transformer) alkalmazhatóságát a pontosság további növelése érdekében.
+ Az eredmények igazolták, hogy a modern CNN architektúrák hatékonyan alkalmazhatók bioakusztikai feladatokra, még korlátozott tanítási erőforrások mellett is. A jövőbeli fejlesztések során érdemes lehet vizsgálni a zajszűrési eljárások hatását, a hosszabb hangfelvételek szegmentálási stratégiáit, valamint a transzformer alapú architektúrák (pl.~Audio Spectrogram Transformer) alkalmazhatóságát a pontosság további növelése érdekében.
 
 
 
@@ -207,12 +207,11 @@ Az elért közel 60\%-os pontosság a 182 osztályos feladat komplexitását és
 % You must declare a $\backslash${\tt{section}} before using any $\backslash${\tt{subsection}} or using $\backslash${\tt{label}} ($\backslash${\tt{appendices}} by itself
 % starts a section numbered zero.)}
 
-%{\appendices
-%\section*{Proof of the First Zonklar Equation}
-%Appendix one text goes here.
-% You can choose not to have a title for an appendix if you want by leaving the argument blank
-%\section*{Proof of the Second Zonklar Equation}
-%Appendix two text goes here.}
+{
+\appendices
+\section*{Generatív MI eszközök használata}
+  A projekt megvalósítása során generatív mesterséges intelligenciát alkalmaztunk a dokumentáció elkészítésének és formázásának támogatására, valamint a Python-alapú megoldások fejlesztése során a megfelelő szintaxis és implementációs megoldások azonosításának elősegítésére.
+}
 
 
 % References
