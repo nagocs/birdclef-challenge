@@ -161,6 +161,10 @@
     \item \textbf{Epochok száma:} A tanítást korai leállítással (Early Stopping) felügyeltük, 5 epoch türelmi idővel (patience). Ez azt jelenti, hogy ha a validációs veszteség 5 epochon keresztül nem javul, a tanítás leáll, és a modell visszaáll a legjobb eredményt adó súlyokra.
   \end{itemize}
 
+ \subsection{Hiperparaméter-optimalizáció}
+
+ A tanítás során a teljesítmény növelése, illetve a tanítási idő csökkentése érdekében több különböző értékkel próbálkoztunk a tanulási ráta (learning rate) paraméter esetén. Az irodalomban fellelhető ajánlások alapján logaritmikus skála szerinti lépésekben változtattuk, azonban azt találtuk, hogy az eredetitől eltérő értékek nem jelentettek értékelhető javulást.
+ 
  \subsection{Kiértékelés}
  
   A betanított modell teljesítményét a tanítás során nem látott teszt adathalmazon értékeltük ki. A fő mérőszámunk az osztályozási pontosság (accuracy), amely megadja a helyesen azonosított madárfajok arányát az összes tesztmintához viszonyítva. Emellett a teszt veszteséget (Test Loss) is monitoroztuk, amely a modell valószínűségi becsléseinek bizonytalanságát tükrözi. A végső kiértékeléshez a \emph{ModelCheckpoint} által mentett, a validációs halmazon legjobb teljesítményt nyújtó modellt használtuk fel (best\_cnn.keras).
@@ -216,7 +220,7 @@ Az elért közel 60\%-os pontosság a 182 osztályos feladat komplexitását és
 
 % References
 \newpage
-\bibliographystyle{ieeetran}
+\bibliographystyle{IEEEtran}
 \bibliography{references}
 
 
